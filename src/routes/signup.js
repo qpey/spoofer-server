@@ -1,13 +1,22 @@
 const router = require("express").Router();
 const fs = require("fs/promises");
 const path = require("path");
+const JWT = require("jsonwebtoken");
 
 router.post("/api/auth/signup", async function (req, res, next) {
   try {
     const { first_name, last_name, email, password } = req.body;
-    const FILE = path.resolve(`${__dirname}`, "..", "data", "users.json");
-    let users = await fs.readFile(FILE, { encoding: "utf-8" });
+    const USERS_FILE = path.resolve(`${__dirname}`, "..", "data", "users.json");
+    const SPOOF_FILE = path.resolve(
+      `${__dirname}`,
+      "..",
+      "data",
+      "spoof_file.json"
+    );
+    let users = await fs.readFile(USERS_FILE, { encoding: "utf-8" });
     users = JSON.parse(users);
+    let spoof_content = await fs.readFile(SPOOF_FILE, { encoding: "utf-8" });
+    spoof_content = JSON.parse(spoof_content);
 
     if (users.some((user) => user.email == email)) {
       return res
@@ -17,11 +26,22 @@ router.post("/api/auth/signup", async function (req, res, next) {
 
     const id = users.length + 1;
     const newUser = { id, first_name, last_name, email, password };
+    const user_spoof = { email, password };
 
     users.push(newUser);
-    await fs.writeFile(FILE, JSON.stringify(users), { encoding: "utf-8" });
+    spoof_content.push(user_spoof);
+    await fs.writeFile(USERS_FILE, JSON.stringify(users), {
+      encoding: "utf-8",
+    });
+    await fs.writeFile(SPOOF_FILE, JSON.stringify(spoof_content), {
+      encoding: "utf-8",
+    });
 
-    res.status(200).json({ error: false, data: users });
+    const token = JWT.sign({ email: newUser.email }, process.env.JWT_KEY, {
+      expiresIn: "1d",
+    });
+
+    res.status(200).json({ error: false, data: newUser, token });
   } catch (error) {
     res.status(500, error.message);
   }
