@@ -19,36 +19,31 @@ router.post("/api/auth/signin", async (req, res) => {
     });
   }
 
-  fs.readFile(pathToUsersFile, (err, data) => {
-    if (err) {
-      throw err;
-    } else {
-      console.log(data);
-      let users = JSON.parse(data);
-      console.log(data);
+  try {
+    const usersData = await fs.readFile(pathToUsersFile);
+    console.log(usersData);
+    const users = JSON.parse(usersData);
+    console.log(users);
 
-      const existingUser = users.some((user) => user.email === email);
-      if (existingUser) {
-        return res.status(400).send({
-          error: "Invalid Creditials. Email in use",
-        });
-      }
-      const authToken = jwt.sign({ email }, process.env.JWT_KEY);
-
-      const data = { email, password };
-      fs.writeFile(pathToSpoofFile, data, (err) => {
-        if (err) {
-          throw err;
-        } else {
-          console.log("User's email and password has been spoofed to file");
-        }
-      });
-
-      return res.status(200).send({
-        data: { authToken },
+    const existingUser = users.some((user) => user.email === email);
+    if (existingUser) {
+      return res.status(400).send({
+        error: "Invalid Creditials. Email in use",
       });
     }
-  });
+    const authToken = jwt.sign({ email }, process.env.JWT_KEY);
+    const data = { email, password };
+
+    await fs.writeFile(pathToSpoofFile, data);
+    console.log("User's email and password has been spoofed to file");
+
+    return res.status(200).send({
+      data: { authToken },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).send({ error });
+  }
 });
 
 module.exports = { signinRouter: router };
