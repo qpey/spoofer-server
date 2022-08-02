@@ -1,10 +1,11 @@
-export class CustomError extends Error {
-    statusCode;
+class CustomError extends Error {
+  statusCode;
 
-    constructor(message){
-        super(message);
-        Object.setPrototypeOf(this,CustomError.prototype);
-    }
+  constructor(message) {
+    super(message);
+    Object.setPrototypeOf(this, CustomError.prototype);
+  }
 
-    serializeErrors();
+  serializeErrors() {}
 }
+module.exports = { CustomError };

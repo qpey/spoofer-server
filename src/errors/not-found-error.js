@@ -1,5 +1,6 @@
-import { CustomError } from "./custom-error";
-export class NotFoundError extends CustomError {
+const { CustomError } = require("./custom-error");
+
+class NotFoundError extends CustomError {
   statusCode = 404;
   constructor(message) {
     super(message || "Route or resource not found");
@@ -13,3 +14,4 @@ export class NotFoundError extends CustomError {
     ];
   }
 }
+module.exports = { NotFoundError };
