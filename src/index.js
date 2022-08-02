@@ -9,6 +9,7 @@ const { CustomError } = require("./errors/custom-error");
 const { NotFoundError } = require("./errors/not-found-error");
 
 const { signinRouter } = require("./routes/signin");
+const { signupRouter } = require("./routes/signup");
 
 const app = express();
 
@@ -24,6 +25,7 @@ if (!process.env.JWT_KEY) {
 }
 
 app.use(signinRouter);
+app.use(signupRouter);
 
 app.all("*", async (req, res) => {
   const error = new NotFoundError("Route to resource not Found");
