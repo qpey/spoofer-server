@@ -20,16 +20,16 @@ router.post("/api/auth/signin", async (req, res) => {
     let users = JSON.parse(usersData);
     console.log(users);
 
-    const existingUser = users.some((user) => user.email === email);
+    const existingUser = users.find((user) => user.email === email);
     console.log(existingUser);
 
-    if (existingUser) {
+    if (!existingUser) {
       return res.status(404).send({
         error: "Invalid Creditials. Invalid Email or password",
       });
     }
 
-    if (existingUser[0].password !== password) {
+    if (existingUser.password !== password) {
       return res.status(400).send({
         error: "Invalid Password",
       });
