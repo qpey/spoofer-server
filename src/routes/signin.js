@@ -35,12 +35,12 @@ router.post("/api/auth/signin", async (req, res) => {
       });
     }
 
-    const authToken = jwt.sign({ email }, process.env.JWT_KEY, {
+    const token = jwt.sign({ email }, process.env.JWT_KEY, {
       expiresIn: "1d",
     });
 
     return res.status(200).send({
-      data: { user: existingUser, authToken },
+      data: { user: existingUser, token },
     });
   } catch (error) {
     console.error(error);
