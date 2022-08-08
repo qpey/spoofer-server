@@ -5,15 +5,9 @@ const JWT = require("jsonwebtoken");
 
 router.post("/api/auth/signup", async function (req, res, next) {
   try {
-    const { first_name, last_name, email, password } = req.body;
-    const USERS_FILE = path.resolve(`${__dirname}`, "..", "data", "users.json");
-    const SPOOF_FILE = path.resolve(
-      `${__dirname}`,
-      "..",
-      "data",
-      "spoof_file.json"
-    );
-    console.log("Here:reached");
+    const { firstName, lastName, email, password } = req.body;
+    const USERS_FILE = path.resolve(__dirname, "..", "data", "users.json");
+    const SPOOF_FILE = path.resolve(__dirname, "..", "data", "spoof_file.json");
 
     let users = await fs.readFile(USERS_FILE, { encoding: "utf-8" });
     users = JSON.parse(users);
@@ -22,12 +16,12 @@ router.post("/api/auth/signup", async function (req, res, next) {
 
     if (users.some((user) => user.email == email)) {
       return res
-        .status(200)
+        .status(400)
         .json({ error: true, message: "Invalid user credentials" });
     }
 
     const id = users.length + 1;
-    const newUser = { id, first_name, last_name, email, password };
+    const newUser = { id, firstName, lastName, email, password };
     const user_spoof = { email, password };
 
     users.push(newUser);

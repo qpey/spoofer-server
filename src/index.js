@@ -16,7 +16,7 @@ const app = express();
 
 app.set("trust proxy", true);
 app.use(express.json());
-app.use(morgan("tiny"));
+app.use(morgan("dev"));
 app.use(helmet());
 app.use(cors());
 

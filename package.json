@@ -1,7 +1,7 @@
 {
   "name": "spoofer-server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./src/index.js",
   "repository": "https://github.com/qpey/spoofer-server.git",
   "authors": [
     "Ian Balijawa <ianbalijawa16@gmail.com>",
@@ -13,7 +13,8 @@
     "start": "node ./src/index.js"
   },
   "engines": {
-    "node": "16.x"
+    "node": "16.x",
+    "npm": "8.X"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^8.5.8",
