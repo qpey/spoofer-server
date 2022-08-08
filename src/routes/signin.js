@@ -40,7 +40,7 @@ router.post("/api/auth/signin", async (req, res) => {
     });
 
     return res.status(200).send({
-      data: { authToken },
+      data: { user: existingUser, authToken },
     });
   } catch (error) {
     console.error(error);
