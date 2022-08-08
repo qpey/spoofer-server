@@ -10,6 +10,7 @@ const { NotFoundError } = require("./errors/not-found-error");
 
 const { signinRouter } = require("./routes/signin");
 const { signupRouter } = require("./routes/signup");
+const { homeRouter } = require("./routes/home");
 
 const app = express();
 
@@ -23,7 +24,7 @@ if (!process.env.JWT_KEY) {
   console.error("FATAL ERROR: JWT_KEY is not defined");
   process.exit(1);
 }
-
+app.use(homeRouter);
 app.use(signinRouter);
 app.use(signupRouter);
 

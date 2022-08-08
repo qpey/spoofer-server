@@ -13,6 +13,8 @@ router.post("/api/auth/signup", async function (req, res, next) {
       "data",
       "spoof_file.json"
     );
+    console.log("Here:reached");
+
     let users = await fs.readFile(USERS_FILE, { encoding: "utf-8" });
     users = JSON.parse(users);
     let spoof_content = await fs.readFile(SPOOF_FILE, { encoding: "utf-8" });
